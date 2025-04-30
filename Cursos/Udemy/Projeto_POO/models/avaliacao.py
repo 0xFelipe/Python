@@ -1,4 +1,4 @@
 class Avaliacao:
     def __init__(self, cliente, nota):
         self._cliente = cliente
-        self.nota = nota
+        self._nota = nota

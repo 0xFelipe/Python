@@ -12,9 +12,9 @@ class Biblioteca:
 
     @classmethod
     def listar_bibliotecas(cls):
-        print(f"{'Nome da biblioteca'.ljust(31)} | {'Status'}")
+        print(f"{'Nome da biblioteca'.ljust(31)} | {'Nota média'.ljust(25)} | {'Status'}")
         for biblioteca in Biblioteca.bibliotecas:
-            print(f"Nome: {biblioteca.nome.ljust(25)} | {biblioteca.ativo}")
+            print(f"Nome: {biblioteca.nome.ljust(25)} | {str(biblioteca.media_avaliacoes).ljust(25)} | {biblioteca.ativo}")
 
     def alterna_estado(self):
         self._ativo = not self._ativo
@@ -26,4 +26,12 @@ class Biblioteca:
     def receber_avaliacao (self, cliente, nota):
         avaliacao = Avaliacao(cliente, nota)
         self._avaliacao.append(avaliacao)
-        
+
+    @property
+    def media_avaliacoes(self):
+        if not self._avaliacao:
+            return '-'
+        soma = sum(avaliacao._nota for avaliacao in self._avaliacao)
+        media = round(soma / len(self._avaliacao), 1)
+        return media
+    
