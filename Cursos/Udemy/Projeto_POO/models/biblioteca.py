@@ -1,10 +1,13 @@
 from models.avaliacao import Avaliacao
+from models.itens.item_biblioteca import ItemBiblioteca
+
 class Biblioteca:
     bibliotecas = []
     def __init__(self,nome):
         self.nome = nome
         self._ativo = False
         self._avaliacao = []
+        self._itens = []
         Biblioteca.bibliotecas.append(self)
 
     def __str__(self):
@@ -35,3 +38,16 @@ class Biblioteca:
         media = round(soma / len(self._avaliacao), 1)
         return media
     
+    def adicionar_item(self, item):
+        if isinstance (item, ItemBiblioteca):
+            self._itens.append(item)
+
+    def exibir_itens(self):
+        print (f"Itens da Biblioteca {self.nome}\n")
+        for i, item in enumerate(self._itens, start=1):
+            if hasattr(item, 'isbn'):
+                msg_livro = f"{i} - Livro: {item._titulo} | Autor: {item._autor} | Preço: R$ {item._preco} | ISBN: {item.isbn}"
+                print(msg_livro)
+            else:
+                msg_revista = f"{i} - Revista: {item._titulo} | Autor: {item._autor} | Preço: R$ {item._preco} | Edição: {item.edicao}"
+                print(msg_revista)
