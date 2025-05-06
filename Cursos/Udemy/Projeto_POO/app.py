@@ -14,6 +14,9 @@ revista1 = Revista("Revista de Ciência", "Revista Científica", 19.90, "Ediçã
 revista2 = Revista("Revista de Tecnologia", "Revista Tech", 24.90, "Edição 2")
 revista3 = Revista("Revista de História", "Revista Histórica", 14.90, "Edição 3")
 
+livro1.aplicar_desconto()
+revista1.aplicar_desconto()
+
 biblioteca_cidade.adicionar_item(livro1)
 biblioteca_cidade.adicionar_item(livro2)
 biblioteca_cidade.adicionar_item(livro3)
