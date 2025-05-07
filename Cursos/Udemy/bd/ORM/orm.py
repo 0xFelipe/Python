@@ -43,4 +43,17 @@ def atualizar_filme(id, titulo=None, ano=None, nota=None):
         session.commit()
     session.close()
 
-atualizar_filme(1, titulo='Os Vingadores: Ultimato', ano=2019, nota=8.4)
+# atualizar_filme(1, titulo='Os Vingadores: Ultimato', ano=2019, nota=8.4)
+
+# Excluindo dados do banco de dados
+
+def excluir_filme(id):
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    filme = session.query(Filme).filter(Filme.id == id).first()
+    if filme:
+        session.delete(filme)
+        session.commit()
+    session.close()
+
+# excluir_filme(1)
