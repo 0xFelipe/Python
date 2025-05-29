@@ -11,7 +11,6 @@ Este programa tem como objetivo **ler arquivos `.kml` contendo zonas geográfica
 - Python 3.7+
 - `.env` com as variáveis de ambiente:
   - `BEARER_TOKEN`
-  - `ACCOUNT_ID` (padrão: 621)
   - `API_URL`
 
 ### 📦 Bibliotecas utilizadas
@@ -37,9 +36,7 @@ zonas.kml          # Exemplo de arquivo de entrada KML
 ```env
 # Token Bearer para autenticação na API
 BEARER_TOKEN=seu_token_aqui
-
-# ID da conta (padrão: 621)
-ACCOUNT_ID=621
+API_URL=seu_url_aqui
 ```
 
 ---
@@ -98,7 +95,6 @@ python Conversor\ main.py
 ```json
 {
   "id": 12345,
-  "account_id": 621,
   "name": "Zona A",
   "order": 0,
   "layer_type": "polygon",

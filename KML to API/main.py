@@ -15,10 +15,11 @@ class KMLToAPIConverter:
     def __init__(self):
         self.bearer_token = os.getenv('BEARER_TOKEN')
         self.api_url = os.getenv("API_URL")
-        self.account_id = int(os.getenv('ACCOUNT_ID', 621))
         
         if not self.bearer_token:
             raise ValueError("BEARER_TOKEN não encontrado no arquivo .env")
+        if not self.api_url:
+            raise ValueError("API_URL não encontrado no arquivo .env")
     
     def extrair_placemarks_do_kml(self, caminho_arquivo):
         """
@@ -128,7 +129,6 @@ class KMLToAPIConverter:
         
         return {
             "id": zone_id,
-            "account_id": self.account_id,
             "name": name,
             "order": 0,
             "layer_type": "polygon",
@@ -233,11 +233,11 @@ def criar_arquivo_env_exemplo():
         with open('.env', 'w') as f:
             f.write("""# Token Bearer para autenticação na API 
 BEARER_TOKEN=seu_token_aqui
+API_URL=""# URL da API para onde os dados serão enviados                    
 
-# ID da conta  (padrão: 621)
-ACCOUNT_ID=621
 """)
         print("Arquivo .env criado. Por favor, configure o BEARER_TOKEN")
+        print("Arquivo .env criado. Por favor, configure o API_URL")
         return False
     return True
 
@@ -276,7 +276,6 @@ def main():
     # Confirma antes de processar
     print(f"\nConfiguração:")
     print(f"- Arquivo KML: {caminho_kml}")
-    print(f"- Account ID: {converter.account_id}")
     print(f"- Delay entre requisições: {delay}s")
     print(f"- API Endpoint: {converter.api_url}")
     
