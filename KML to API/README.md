@@ -25,7 +25,7 @@ pip install python-dotenv randomcolor requests
 ## 📁 Estrutura de Arquivos
 
 ```
-Conversor V2.py
+Conversor main.py
 .env               # Arquivo de configuração com variáveis da API
 zonas.kml          # Exemplo de arquivo de entrada KML
 ```
@@ -49,7 +49,7 @@ ACCOUNT_ID=621
 1. **Execute o script**:
 
 ```bash
-python Conversor\ V2.py
+python Conversor\ main.py
 ```
 
 2. **Forneça o caminho para o arquivo `.kml`** quando solicitado.
@@ -128,7 +128,7 @@ python Conversor\ V2.py
 ## ✅ Exemplo de uso na prática
 
 ```bash
-$ python Conversor\ V2.py
+$ python Conversor\ main.py
 
 === CONVERSOR KML PARA API ===
 
