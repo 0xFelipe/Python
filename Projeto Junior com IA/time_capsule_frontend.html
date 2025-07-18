@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🕰️ Cápsula do Tempo Virtual</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #4a5568;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header p {
+            color: #718096;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-container input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            border: 2px dashed #cbd5e0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .file-input-label:hover {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .file-input-label.has-file {
+            border-color: #48bb78;
+            background: rgba(72, 187, 120, 0.1);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loading-spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        .message.success {
+            background: rgba(72, 187, 120, 0.1);
+            border: 2px solid #48bb78;
+            color: #2f855a;
+        }
+
+        .message.error {
+            background: rgba(245, 101, 101, 0.1);
+            border: 2px solid #f56565;
+            color: #c53030;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 10px;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 0.9em;
+            color: #718096;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🕰️ Cápsula do Tempo Virtual</h1>
+            <p>Escreva uma mensagem para você mesmo no futuro. Nós entregaremos na data que você escolher!</p>
+        </div>
+
+        <div id="messageContainer" class="message"></div>
+
+        <div id="loadingContainer" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Criando sua cápsula do tempo...</p>
+        </div>
+
+        <form id="capsuleForm">
+            <div class="form-group">
+                <label for="name">📝 Seu Nome</label>
+                <input type="text" id="name" name="name" required placeholder="Como você gostaria de ser chamado?">
+            </div>
+
+            <div class="form-group">
+                <label for="email">📧 Seu Email</label>
+                <input type="email" id="email" name="email" required placeholder="Para onde devemos enviar sua cápsula?">
+            </div>
+
+            <div class="form-group">
+                <label for="message">💭 Mensagem para o Futuro</label>
+                <textarea id="message" name="message" required placeholder="Escreva sua mensagem para você mesmo no futuro. O que você quer lembrar? Quais são seus sonhos e objetivos hoje?"></textarea>
+                <div class="char-count">
+                    <span id="charCount">0</span> caracteres
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="deliveryDate">📅 Data de Entrega</label>
+                <input type="date" id="deliveryDate" name="delivery_date" required>
+            </div>
+
+            <div class="form-group">
+                <label for="image">🖼️ Imagem (Opcional)</label>
+                <div class="file-input-container">
+                    <input type="file" id="image" name="image" accept="image/*">
+                    <label for="image" class="file-input-label" id="fileLabel">
+                        <span>📷 Clique para adicionar uma imagem</span>
+                    </label>
+                </div>
+                <div id="imagePreview"></div>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                🚀 Criar Cápsula do Tempo
+            </button>
+        </form>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:5000/api';
+        
+        const form = document.getElementById('capsuleForm');
+        const messageContainer = document.getElementById('messageContainer');
+        const loadingContainer = document.getElementById('loadingContainer');
+        const submitBtn = document.getElementById('submitBtn');
+        const messageTextarea = document.getElementById('message');
+        const charCount = document.getElementById('charCount');
+        const imageInput = document.getElementById('image');
+        const fileLabel = document.getElementById('fileLabel');
+        const imagePreview = document.getElementById('imagePreview');
+        const deliveryDateInput = document.getElementById('deliveryDate');
+
+        // Definir data mínima como amanhã
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        deliveryDateInput.min = tomorrow.toISOString().split('T')[0];
+
+        // Contador de caracteres
+        messageTextarea.addEventListener('input', () => {
+            const count = messageTextarea.value.length;
+            charCount.textContent = count;
+            
+            if (count > 1000) {
+                charCount.style.color = '#f56565';
+            } else if (count > 800) {
+                charCount.style.color = '#ed8936';
+            } else {
+                charCount.style.color = '#718096';
+            }
+        });
+
+        // Preview da imagem
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="preview-image">`;
+                    fileLabel.classList.add('has-file');
+                    fileLabel.innerHTML = `<span>✅ ${file.name}</span>`;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.innerHTML = '';
+                fileLabel.classList.remove('has-file');
+                fileLabel.innerHTML = '<span>📷 Clique para adicionar uma imagem</span>';
+            }
+        });
+
+        // Função para mostrar mensagem
+        function showMessage(text, type) {
+            messageContainer.textContent = text;
+            messageContainer.className = `message ${type}`;
+            messageContainer.style.display = 'block';
+            
+            // Auto-hide depois de 5 segundos
+            setTimeout(() => {
+                messageContainer.style.display = 'none';
+            }, 5000);
+        }
+
+        // Função para mostrar/esconder loading
+        function toggleLoading(show) {
+            loadingContainer.style.display = show ? 'block' : 'none';
+            form.style.display = show ? 'none' : 'block';
+            submitBtn.disabled = show;
+        }
+
+        // Submit do formulário
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            toggleLoading(true);
+            
+            try {
+                const formData = new FormData(form);
+                
+                const response = await fetch(`${API_BASE_URL}/capsule`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showMessage(
+                        `🎉 Cápsula criada com sucesso! Você receberá sua mensagem em ${new Date(data.delivery_date).toLocaleDateString('pt-BR')}`,
+                        'success'
+                    );
+                    form.reset();
+                    imagePreview.innerHTML = '';
+                    fileLabel.classList.remove('has-file');
+                    fileLabel.innerHTML = '<span>📷 Clique para adicionar uma imagem</span>';
+                    charCount.textContent = '0';
+                } else {
+                    showMessage(`❌ Erro: ${data.error}`, 'error');
+                }
+            } catch (error) {
+                showMessage(`❌ Erro de conexão: ${error.message}`, 'error');
+            } finally {
+                toggleLoading(false);
+            }
+        });
+
+        // Adicionar animações suaves
+        const inputs = document.querySelectorAll('input, textarea');
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.style.transform = 'translateY(-2px)';
+            });
+            
+            input.addEventListener('blur', () => {
+                input.parentElement.style.transform = 'translateY(0)';
+            });
+        });
+
+        // Efeito de digitação no placeholder
+        const placeholders = [
+            "Escreva sobre seus sonhos e objetivos...",
+            "Compartilhe como você está se sentindo hoje...",
+            "Deixe um conselho para você mesmo no futuro...",
+            "Registre um momento especial que está vivendo...",
+            "Escreva sobre suas esperanças para o futuro..."
+        ];
+
+        let currentPlaceholder = 0;
+        function changePlaceholder() {
+            messageTextarea.placeholder = placeholders[currentPlaceholder];
+            currentPlaceholder = (currentPlaceholder + 1) % placeholders.length;
+        }
+
+        // Mudar placeholder a cada 3 segundos
+        setInterval(changePlaceholder, 3000);
+    </script>
+</body>
+</html>
