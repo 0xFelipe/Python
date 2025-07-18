@@ -4,13 +4,6 @@ Este é um sistema de cápsulas do tempo digitais. Os usuários podem escrever m
 
 ---
 
-## 🚀 Acesse Online
-
-Você pode acessar e usar a aplicação diretamente pelo navegador:
-
-🔗 **[Clique para abrir o sistema](http://0xsistema.ddns.net:8090/)**
-
----
 
 ## 🧩 Funcionalidades
 
